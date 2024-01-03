@@ -109,16 +109,19 @@
       </SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;E:\source\humanDection\misc\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;E:\source\humanDection\misc\stb;E:\source\libzmq\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\source\libzmq\build\lib\Release;..\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libzmq-v143-mt-4_3_6.lib;libzmq-v143-mt-s-4_3_6.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "E:\source\libzmq\build\bin\Release\libzmq-v143-mt-4_3_6.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -146,6 +149,9 @@
     <ClCompile Include="..\..\imgui_widgets.cpp" />
     <ClCompile Include="AlertCamera.cpp" />
     <ClCompile Include="imguiProto.cpp" />
+    <ClCompile Include="interfaceManager.cpp" />
+    <ClCompile Include="zeroMQ.cpp" />
+    <ClCompile Include="zeroMQServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\backends\imgui_impl_glfw.h" />
@@ -155,6 +161,9 @@
     <ClInclude Include="..\..\imgui.h" />
     <ClInclude Include="..\..\imgui_internal.h" />
     <ClInclude Include="AlertCamera.h" />
+    <ClInclude Include="interfaceManager.h" />
+    <ClInclude Include="zeroMQ.h" />
+    <ClInclude Include="zeroMQServer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\misc\images\kcch.png" />

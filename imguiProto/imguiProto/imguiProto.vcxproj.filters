@@ -34,7 +34,16 @@
     <ClCompile Include="..\..\backends\imgui_impl_opengl3.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\AlertCamera.cpp">
+    <ClCompile Include="AlertCamera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="interfaceManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="zeroMQ.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="zeroMQServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,8 +66,12 @@
     <ClInclude Include="..\..\backends\imgui_impl_opengl3_loader.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\AlertCamera.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
+    <ClInclude Include="AlertCamera.h" />
+    <ClInclude Include="interfaceManager.h" />
+    <ClInclude Include="zeroMQ.h" />
+    <ClInclude Include="zeroMQServer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\misc\images\kcch.png" />
   </ItemGroup>
 </Project>
