@@ -1,9 +1,7 @@
-#include "zeromq.h"
+#include "zeroMQ.h"
 
-#include <cassert>
-#include <iostream>
 
-zeroMQ::zeroMQ() : requester(NULL), context(NULL){
+zeroMQ::zeroMQ() : requester(NULL), context(NULL), running(true) {
 
 }
 
@@ -16,10 +14,11 @@ void zeroMQ::init() {
     context = zmq_ctx_new();
     requester = zmq_socket(context, ZMQ_REQ);
     zmq_connect(requester, "tcp://172.16.20.7:5555");
-
-
 }
 void zeroMQ::close() {
+    if (serverThread.joinable()) {
+        serverThread.join();
+    }
     zmq_close(requester);
     zmq_ctx_destroy(context);
 }
@@ -36,9 +35,17 @@ std::string zeroMQ::receiveMessage(void* socket) {
     zmq_msg_recv(&zmqMessage, socket, 0);
     std::string msg(static_cast<char*>(zmq_msg_data(&zmqMessage)), zmq_msg_size(&zmqMessage));
     zmq_msg_close(&zmqMessage);
+    
     return msg;
 }
 
 void zeroMQ::waitMessage() {
-    std::string msgReceived = receiveMessage(requester);
+    
+    serverThread = std::thread(&zeroMQ::zmqThread, this);
+}
+void zeroMQ::zmqThread() {
+
+      sendMessage("start");
+
+      receiveMessage(requester);
 }

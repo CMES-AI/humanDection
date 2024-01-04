@@ -16,7 +16,7 @@ void zeroMQServer::init() {
     // 컨텍스트와 소켓 준비
     context = zmq_ctx_new();
     responder = zmq_socket(context, ZMQ_REP);
-    int rc = zmq_bind(responder, "tcp://localhost:5555");
+    int rc = zmq_bind(responder, "tcp://172.16.20.51:5555");
     assert(rc == 0);
 }
 void zeroMQServer::runServer() {
@@ -43,3 +43,5 @@ std::string zeroMQServer::receiveMessage() {
     zmq_msg_close(&zmqMessage);
     return msg;
 }
+
+

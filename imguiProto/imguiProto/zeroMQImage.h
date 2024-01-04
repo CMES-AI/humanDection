@@ -6,29 +6,27 @@
 
 #include <cassert>
 #include <iostream>
-#include <thread>
 
-class zeroMQ
+class zeroMQImage
 {
 public:
-    zeroMQ();
-    virtual ~zeroMQ();
+    zeroMQImage();
+    virtual ~zeroMQImage();
 
     void init();
     void close();
 
-    void sendMessage( const std::string& message);
-   
+    int sendMessage(const std::string& message);
+
     void waitMessage();
 
 private:
     std::string receiveMessage(void* socket);
-    void zmqThread();
 
 private:
     void* requester;
     void* context;
     std::atomic<bool> running;
-    std::thread serverThread;
+    
 };
 

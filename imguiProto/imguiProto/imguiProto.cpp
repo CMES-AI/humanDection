@@ -43,7 +43,13 @@ int main(int, char**)
     interfaceManager& interfacemanager = interfaceManager::getInstance();
     
     //interfacemanager.intZeroMQServer();
-    interfacemanager.intZeroMQ();
+
+
+    interfacemanager.intZeroMQImageServer();
+    interfacemanager.intZeroMQImage();
+    interfacemanager.runZeroMQImageServer();
+    
+
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
@@ -152,13 +158,13 @@ int main(int, char**)
         ImGui::NewFrame();
 
         
-        interfacemanager.sendZeroMQ("start");
+       
         //interfacemanager.runZeroMQServer();
         //interfacemanager.sendZeroMQServer("test");
         
-        //interfacemanager.runZeroMQ();
+       
         
-        
+        interfacemanager.runZeroMQImage();
         AlertCamera::DrawSetCamera();
         
         // 3. Show another simple window.
@@ -185,6 +191,7 @@ int main(int, char**)
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;
 #endif
+    
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

@@ -109,18 +109,19 @@
       </SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;E:\source\humanDection\misc\stb;E:\source\libzmq\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;E:\source\humanDection\misc\stb;E:\source\libzmq\include;E:\source\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\source\libzmq\build\lib\Release;..\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;libzmq-v143-mt-4_3_6.lib;libzmq-v143-mt-s-4_3_6.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\source\libzmq\build\lib\Release;..\libs\glfw\lib-vc2010-64;E:\source\opencv\build\x64\vc16\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libzmq-v143-mt-4_3_6.lib;libzmq-v143-mt-s-4_3_6.lib;opencv_world480d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "E:\source\libzmq\build\bin\Release\libzmq-v143-mt-4_3_6.dll" "$(OutDir)"</Command>
+      <Command>copy /Y "E:\source\libzmq\build\bin\Release\libzmq-v143-mt-4_3_6.dll" "$(OutDir)"
+copy /Y "E:\source\opencv\build\x64\vc16\bin\opencv_world480d.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,13 +132,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;E:\source\humanDection\misc\stb;E:\source\libzmq\include;E:\source\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;libzmq-v143-mt-4_3_6.lib;libzmq-v143-mt-s-4_3_6.lib;opencv_world480.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "E:\source\opencv\build\x64\vc16\bin\opencv_world480.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\backends\imgui_impl_glfw.cpp" />
@@ -151,6 +158,8 @@
     <ClCompile Include="imguiProto.cpp" />
     <ClCompile Include="interfaceManager.cpp" />
     <ClCompile Include="zeroMQ.cpp" />
+    <ClCompile Include="zeroMQImage.cpp" />
+    <ClCompile Include="zeroMQImageServer.cpp" />
     <ClCompile Include="zeroMQServer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,10 +172,14 @@
     <ClInclude Include="AlertCamera.h" />
     <ClInclude Include="interfaceManager.h" />
     <ClInclude Include="zeroMQ.h" />
+    <ClInclude Include="zeroMQImage.h" />
+    <ClInclude Include="zeroMQImageServer.h" />
     <ClInclude Include="zeroMQServer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\misc\images\kcch.png" />
+    <Image Include="..\..\misc\images\kcch1.png" />
+    <Image Include="..\..\misc\images\test1.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

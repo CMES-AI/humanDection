@@ -46,6 +46,12 @@
     <ClCompile Include="zeroMQServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="zeroMQImage.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="zeroMQImageServer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\imconfig.h">
@@ -70,8 +76,12 @@
     <ClInclude Include="interfaceManager.h" />
     <ClInclude Include="zeroMQ.h" />
     <ClInclude Include="zeroMQServer.h" />
+    <ClInclude Include="zeroMQImage.h" />
+    <ClInclude Include="zeroMQImageServer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\misc\images\kcch.png" />
+    <Image Include="..\..\misc\images\kcch1.png" />
+    <Image Include="..\..\misc\images\test1.jpg" />
   </ItemGroup>
 </Project>

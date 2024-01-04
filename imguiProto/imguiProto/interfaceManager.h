@@ -4,6 +4,8 @@
 
 class zeroMQ;
 class zeroMQServer;
+class zeroMQImage;
+class zeroMQImageServer;
 
 class interfaceManager
 {
@@ -22,10 +24,19 @@ public:
     void runZeroMQ();
     void sendZeroMQ(const std::string& message);
 
-
     void intZeroMQServer();
     void runZeroMQServer();
     void sendZeroMQServer(const std::string& message);
+
+    void intZeroMQImage();
+    void runZeroMQImage();
+    void sendZeroMQImage(const std::string& message);
+
+    void intZeroMQImageServer();
+    void runZeroMQImageServer();
+    void sendZeroMQImageServer(const std::string& message);
+
+
 
 private:
     // 생성자를 private으로 설정하여 외부에서의 생성을 방지
@@ -33,5 +44,7 @@ private:
 
     zeroMQ* zeroMq;
     zeroMQServer* zeroMqServer;
+    zeroMQImage* zeromqimage;
+    zeroMQImageServer* zeromqimageserver;
 };
 
