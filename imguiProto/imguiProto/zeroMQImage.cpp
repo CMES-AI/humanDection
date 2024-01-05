@@ -18,13 +18,18 @@ zeroMQImage::~zeroMQImage() {
 void zeroMQImage::init() {
     // 컨텍스트와 소켓 준비
     context = zmq_ctx_new();
-    requester = zmq_socket(context, ZMQ_REQ);
-    zmq_connect(requester, "tcp://localhost:5555");
+    requester = zmq_socket(context, ZMQ_SUB);
+    int rc = zmq_connect(requester, "tcp://172.16.20.49:5556");
 
+    assert(rc == 0);
 
+    // Subscribe to all messages
+    rc = zmq_setsockopt(requester, ZMQ_SUBSCRIBE, "", 0);
+    assert(rc == 0);
 }
 void zeroMQImage::close() {
-  
+
+    serverThread.join();
     zmq_close(requester);
     zmq_ctx_destroy(context);
 }
@@ -60,6 +65,35 @@ std::string zeroMQImage::receiveMessage(void* socket) {
 
 void zeroMQImage::waitMessage() {
 
-    sendMessage("start");
+    serverThread = std::thread(&zeroMQImage::zmqThread, this);
 }
 
+void zeroMQImage::zmqThread() {
+    zmq_msg_t reply;
+    int rc = zmq_msg_init(&reply);
+    assert(rc == 0);
+ 
+    for (;;) {
+
+        rc = zmq_msg_recv(&reply, requester, 0);
+        assert(rc != -1);
+        // Get the size of the received message
+        size_t size = zmq_msg_size(&reply);
+
+        std::cout << "Received: " << size << std::endl;
+        // Create a cv::Mat object from the received data
+        cv::Mat img = cv::imdecode(cv::Mat(1, size, CV_8UC1, zmq_msg_data(&reply)), cv::IMREAD_COLOR);
+
+
+        cv::imshow("Received", img);
+        cv::waitKey(1);
+    }
+
+    
+   
+      
+   
+
+     
+
+}

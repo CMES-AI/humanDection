@@ -6,7 +6,7 @@
 
 #include <cassert>
 #include <iostream>
-
+#include <thread>
 class zeroMQImage
 {
 public:
@@ -22,11 +22,12 @@ public:
 
 private:
     std::string receiveMessage(void* socket);
-
+    void zmqThread();
+   
 private:
     void* requester;
     void* context;
     std::atomic<bool> running;
-    
+    std::thread serverThread;
 };
 

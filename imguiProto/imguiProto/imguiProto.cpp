@@ -44,11 +44,9 @@ int main(int, char**)
     
     //interfacemanager.intZeroMQServer();
 
-
-    interfacemanager.intZeroMQImageServer();
+        
     interfacemanager.intZeroMQImage();
-    interfacemanager.runZeroMQImageServer();
-    
+    interfacemanager.runZeroMQImage();
 
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -162,9 +160,8 @@ int main(int, char**)
         //interfacemanager.runZeroMQServer();
         //interfacemanager.sendZeroMQServer("test");
         
+
        
-        
-        interfacemanager.runZeroMQImage();
         AlertCamera::DrawSetCamera();
         
         // 3. Show another simple window.

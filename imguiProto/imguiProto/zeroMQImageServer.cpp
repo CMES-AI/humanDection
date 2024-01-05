@@ -19,7 +19,7 @@ zeroMQImageServer::~zeroMQImageServer() {
 void zeroMQImageServer::init() {
     // 컨텍스트와 소켓 준비
     context = zmq_ctx_new();
-    responder = zmq_socket(context, ZMQ_REP);
+    responder = zmq_socket(context, ZMQ_SUB);
     
     int rc = zmq_bind(responder, "tcp://*:5555");
     assert(rc == 0);
