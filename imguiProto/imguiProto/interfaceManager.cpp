@@ -39,18 +39,32 @@ void interfaceManager::sendZeroMQServer(const std::string& message) {
 }
 
 
-void interfaceManager::intZeroMQImage() {
-    if (NULL == zeromqimage) {
-        zeromqimage = new zeroMQImage();
-        zeromqimage->init();
+void interfaceManager::intZeroMQImage_1(const char* addr) {
+    if (NULL == zeromqimage_1) {
+        zeromqimage_1 = new zeroMQImage();
+        zeromqimage_1->init(addr);
     }
 }
-void interfaceManager::runZeroMQImage() {
-    zeromqimage->waitMessage();
+void interfaceManager::runZeroMQImage_1(std::queue<cv::Mat>* dataQueue, std::mutex* mtx) {
+    zeromqimage_1->waitMessage(dataQueue, mtx);
 }
 
-void interfaceManager::sendZeroMQImage(const std::string& message) {
-    zeromqimage->sendMessage(message);
+void interfaceManager::sendZeroMQImage_1(const std::string& message) {
+    zeromqimage_1->sendMessage(message);
+}
+
+void interfaceManager::intZeroMQImage_2(const char* addr) {
+    if (NULL == zeromqimage_2) {
+        zeromqimage_2 = new zeroMQImage();
+        zeromqimage_2->init(addr);
+    }
+}
+void interfaceManager::runZeroMQImage_2(std::queue<cv::Mat>* dataQueue, std::mutex* mtx) {
+    zeromqimage_2->waitMessage(dataQueue, mtx);
+}
+
+void interfaceManager::sendZeroMQImage_2(const std::string& message) {
+    zeromqimage_2->sendMessage(message);
 }
 
 void interfaceManager::intZeroMQImageServer() {

@@ -6,6 +6,11 @@
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 #include <string>
 #include <vector>
+#include <mutex>
+#include <queue>
+
+#include <opencv2/opencv.hpp>
+
 #include "imgui.h"
 #include "imgui_internal.h"
 class AlertCamera
@@ -22,7 +27,7 @@ public:
     static void ShowPolygon(ImVec2 imagePos, ImVec2 imageSize);
 private:
     /// @begin impl
-    static void PreviewCamera();
+    static void PreviewCamera(std::queue<cv::Mat>* dataQueue_, std::mutex* mtx_);
     static bool TextButton(std::string label, bool &hoverdButton);
     static void SettingView();
     static void DrawPolygon(ImGuiWindow* window, const std::vector<ImVec2>& points, ImU32 col);

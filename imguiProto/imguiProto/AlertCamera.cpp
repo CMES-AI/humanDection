@@ -4,10 +4,14 @@
 #include "AlertCamera.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
+#include "dataManager.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 AlertCamera alertCamera;
-
 
 const int monitoringMode = 0;
 const int settingMode = 1;
@@ -44,6 +48,29 @@ GLuint LoadTexture(const char* filepath)
     return texture;
 }
 
+void MatToTexture(const cv::Mat& mat, GLuint& texture)
+{
+    if (mat.empty())
+        return;
+
+    int width = mat.cols;
+    int height = mat.rows;
+
+    // OpenGL 텍스처 생성
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // 텍스처 파라미터 설정
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, 0x812F);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, 0x812F);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // 텍스처 데이터 업로드
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, mat.data);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 
 void AlertCamera::DrawSetCamera()
@@ -64,7 +91,6 @@ void AlertCamera::DrawSetCamera()
                 modeSetting = monitoringMode;
             }
 
-
             if (AlertCamera::TextButton("Stop", StopHoveredButton)) {
                 modeSetting = settingMode;
             }
@@ -80,14 +106,12 @@ void AlertCamera::DrawSetCamera()
             int m_selectedItem = -1;
             std::vector<std::string> m_items = { "Item 1", "Item 2", "Item 3", "Item 4" };
 
-        
             // 리스트의 시작 위치를 저장
             ImVec2 list_start_pos = ImGui::GetCursorScreenPos();
             
             for (int i = 0; i < m_items.size(); i++) {
                 std::string itemid = "##" + std::to_string(i);
                 ImGui::Selectable("2024_01_Item:", &m_selectedItem, ImGuiSelectableFlags_None, ImVec2(250, 35));
-                
             }
 
             // 리스트의 끝 위치를 저장
@@ -106,13 +130,13 @@ void AlertCamera::DrawSetCamera()
 
             ImGui::BeginGroup();
             ImGui::Dummy(ImVec2(600, 30));
+            dataManager& datamanager = dataManager::getInstance();
 
-
-            AlertCamera::PreviewCamera();
+            AlertCamera::PreviewCamera(&datamanager.dataQueue_1, &datamanager.mtx_1);
             ImGui::SameLine();
             ImGui::Separator();
             ImGui::SameLine();
-            AlertCamera::PreviewCamera();
+            AlertCamera::PreviewCamera(&datamanager.dataQueue_2, &datamanager.mtx_2);
 
             ImGui::Dummy(ImVec2(200, 300));
             if (ImGui::BeginTabBar("MyTabBar")) {
@@ -149,14 +173,25 @@ void AlertCamera::bottomInfo() {
 
 }
 
-void AlertCamera::PreviewCamera()
+void AlertCamera::PreviewCamera(std::queue<cv::Mat>* dataQueue_, std::mutex* mtx_)
 {
-
-    // 텍스처 로드 (텍스처 핸들러는 플랫폼 및 렌더러에 따라 다름)
-    GLuint  texture = LoadTexture("..\\..\\misc\\images\\kcch.png");
-    ImTextureID textureID = (ImTextureID)(intptr_t)texture;
     // 이미지 뷰어
 
+    
+    std::lock_guard<std::mutex> lock(*mtx_);
+
+    cv::Mat data = dataQueue_->front();
+    if(dataQueue_->size() > 2)
+        dataQueue_->pop();
+    
+    cv::cvtColor(data, data, cv::COLOR_BGR2RGBA);
+
+    // OpenGL 텍스처로 변환
+    GLuint texture;
+
+    MatToTexture(data, texture);
+
+    ImTextureID textureID = (ImTextureID)(intptr_t)texture;
     ImGuiWindow* window = ImGui::GetCurrentWindow();
     if (window->SkipItems)
         return;
@@ -166,8 +201,6 @@ void AlertCamera::PreviewCamera()
         ImVec2 windowSize = ImGui::GetWindowSize();
         ImVec2 imageSize = ImVec2(640, 480);
       //  ImVec2 imagePos = ImVec2((windowSize.x - imageSize.x) * 0.5f, (windowSize.y - imageSize.y) * 0.5f);
-
-        
 
         // 테두리를 그립니다.
         window->DrawList->AddRect(imagePos, ImVec2(imagePos.x + imageSize.x, imagePos.y + imageSize.y), IM_COL32(150, 150, 150, 255), 0.0f, 0xf, 20.0f); // 테두리 두께를 20.0f로 설정

@@ -4,6 +4,8 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 
+#include "dataManager.h"
+
 typedef unsigned char uchar;
 using namespace std;
 
@@ -15,11 +17,11 @@ zeroMQImage::~zeroMQImage() {
 
 }
 
-void zeroMQImage::init() {
+void zeroMQImage::init(const char* addr) {
     // 컨텍스트와 소켓 준비
     context = zmq_ctx_new();
     requester = zmq_socket(context, ZMQ_SUB);
-    int rc = zmq_connect(requester, "tcp://172.16.20.49:5556");
+    int rc = zmq_connect(requester, addr);
 
     assert(rc == 0);
 
@@ -63,8 +65,10 @@ std::string zeroMQImage::receiveMessage(void* socket) {
     return msg;
 }
 
-void zeroMQImage::waitMessage() {
+void zeroMQImage::waitMessage(std::queue<cv::Mat>* dataQueue_, std::mutex* mtx_) {
 
+    dataQueue = dataQueue_; // 공유 데이터 큐
+    mtx = mtx_; // 동기화를 위한 뮤텍스
     serverThread = std::thread(&zeroMQImage::zmqThread, this);
 }
 
@@ -72,7 +76,7 @@ void zeroMQImage::zmqThread() {
     zmq_msg_t reply;
     int rc = zmq_msg_init(&reply);
     assert(rc == 0);
- 
+
     for (;;) {
 
         rc = zmq_msg_recv(&reply, requester, 0);
@@ -84,8 +88,10 @@ void zeroMQImage::zmqThread() {
         // Create a cv::Mat object from the received data
         cv::Mat img = cv::imdecode(cv::Mat(1, size, CV_8UC1, zmq_msg_data(&reply)), cv::IMREAD_COLOR);
 
+        std::lock_guard<std::mutex> lock(*mtx);
+        dataQueue->push(img);
 
-        cv::imshow("Received", img);
+//        cv::imshow("Received", img);
         cv::waitKey(1);
     }
 

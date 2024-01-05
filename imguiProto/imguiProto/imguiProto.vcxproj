@@ -157,6 +157,7 @@ copy /Y "E:\source\opencv\build\x64\vc16\bin\opencv_world480d.dll" "$(OutDir)"</
     <ClCompile Include="..\..\imgui_tables.cpp" />
     <ClCompile Include="..\..\imgui_widgets.cpp" />
     <ClCompile Include="AlertCamera.cpp" />
+    <ClCompile Include="dataManager.cpp" />
     <ClCompile Include="imguiProto.cpp" />
     <ClCompile Include="interfaceManager.cpp" />
     <ClCompile Include="zeroMQ.cpp" />
@@ -172,6 +173,7 @@ copy /Y "E:\source\opencv\build\x64\vc16\bin\opencv_world480d.dll" "$(OutDir)"</
     <ClInclude Include="..\..\imgui.h" />
     <ClInclude Include="..\..\imgui_internal.h" />
     <ClInclude Include="AlertCamera.h" />
+    <ClInclude Include="dataManager.h" />
     <ClInclude Include="interfaceManager.h" />
     <ClInclude Include="zeroMQ.h" />
     <ClInclude Include="zeroMQImage.h" />

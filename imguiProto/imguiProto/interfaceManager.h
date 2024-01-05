@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <mutex>
+#include <queue>
+
+#include <opencv2/opencv.hpp>
 
 class zeroMQ;
 class zeroMQServer;
@@ -28,9 +32,13 @@ public:
     void runZeroMQServer();
     void sendZeroMQServer(const std::string& message);
 
-    void intZeroMQImage();
-    void runZeroMQImage();
-    void sendZeroMQImage(const std::string& message);
+    void intZeroMQImage_1(const char* addr);
+    void runZeroMQImage_1(std::queue<cv::Mat>* dataQueue, std::mutex* mtx);
+    void sendZeroMQImage_1(const std::string& message);
+
+    void intZeroMQImage_2(const char* addr);
+    void runZeroMQImage_2(std::queue<cv::Mat>* dataQueue, std::mutex* mtx);
+    void sendZeroMQImage_2(const std::string& message);
 
     void intZeroMQImageServer();
     void runZeroMQImageServer();
@@ -44,7 +52,8 @@ private:
 
     zeroMQ* zeroMq;
     zeroMQServer* zeroMqServer;
-    zeroMQImage* zeromqimage;
+    zeroMQImage* zeromqimage_1;
+    zeroMQImage* zeromqimage_2;
     zeroMQImageServer* zeromqimageserver;
 };
 
